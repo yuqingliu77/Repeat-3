@@ -1,0 +1,464 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: none; /* 🔥 Firefox 隐藏滚动条 */
+    -ms-overflow-style: none; /* 🔥 IE/Edge 隐藏滚动条 */
+}
+
+/* 🔥 新增：所有元素隐藏 Webkit 滚动条 */
+*::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: hidden;
+    overflow-y: auto; /* 🔥 保持可滚动但隐藏滚动条 */
+    min-height: 248vh;
+    cursor: none;
+    scrollbar-width: none; /* 🔥 Firefox 隐藏滚动条 */
+    -ms-overflow-style: none; /* 🔥 IE/Edge 隐藏滚动条 */
+}
+
+/* 🔥 确保 body 的 Webkit 滚动条隐藏 */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* 自定义光标 */
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease;
+}
+
+.custom-cursor.clicking {
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* 顶部导航 - 与 home.css 一致 */
+.top-nav {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    mix-blend-mode: difference;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.nav-link:hover {
+    opacity: 0.6;
+}
+
+.nav-left {
+    text-align: left;
+    flex: 1;
+}
+
+.nav-center {
+    text-align: center;
+    flex: 1;
+}
+
+.nav-right {
+    text-align: right;
+    flex: 1;
+}
+
+/* 🔥 修改：圆点网格容器 - 调整高度 */
+.dots-container {
+    position: relative;
+    width: calc(100% - 80px);
+    min-height: 160vh; /* 🔥 4 行圆点高度 */
+    margin: 0 40px;
+}
+
+/* 🔥 新增：单个圆点样式 */
+.dot {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+}
+
+/* 🔥 重写：圆点位置 - 4 行 × 3 列，上下间距增大 0.8 倍（约 76vh） */
+/* 第 1 行 - 距顶部 20vh */
+.dot:nth-child(1) {
+    left: 0%;
+    top: 20vh;
+}
+
+.dot:nth-child(2) {
+    left: 50%;
+    top: 20vh;
+}
+
+.dot:nth-child(3) {
+    left: 100%;
+    top: 20vh;
+}
+
+/* 第 2 行 - 距顶部 96vh（20vh + 76vh） */
+.dot:nth-child(4) {
+    left: 0%;
+    top: 96vh; /* 🔥 20 + 76 = 96vh */
+}
+
+.dot:nth-child(5) {
+    left: 50%;
+    top: 96vh;
+}
+
+.dot:nth-child(6) {
+    left: 100%;
+    top: 96vh;
+}
+
+/* 第 3 行 - 距顶部 172vh（96vh + 76vh） */
+.dot:nth-child(7) {
+    left: 0%;
+    top: 172vh; /* 🔥 96 + 76 = 172vh */
+}
+
+.dot:nth-child(8) {
+    left: 50%;
+    top: 172vh;
+}
+
+.dot:nth-child(9) {
+    left: 100%;
+    top: 172vh;
+}
+
+/* 第 4 行 - 距顶部 248vh（172vh + 76vh） */
+.dot:nth-child(10) {
+    left: 0%;
+    top: 248vh; /* 🔥 172 + 76 = 248vh */
+}
+
+.dot:nth-child(11) {
+    left: 50%;
+    top: 248vh;
+}
+
+.dot:nth-child(12) {
+    left: 100%;
+    top: 248vh;
+}
+
+/* 🔥 隐藏第 5、6 行圆点 */
+.dot:nth-child(13),
+.dot:nth-child(14),
+.dot:nth-child(15),
+.dot:nth-child(16),
+.dot:nth-child(17),
+.dot:nth-child(18) {
+    display: none;
+}
+
+/* 🔥 删除：字体展示区域的旧样式 */
+/* .font-display-section { ... } */
+
+/* 🔥 新增：放大的动态 Ü */
+.font-large-u {
+    position: absolute;
+    top: 30vh;
+    right: 8vw;
+    width: 280px;
+    height: 280px;
+    z-index: 15;
+}
+
+/* 🔥 新增：单词 Hallo 动态 */
+.font-word-hallo {
+    position: absolute;
+    top: 200vh;
+    left: 10vw;
+    width: 500px;
+    height: 120px;
+    z-index: 15;
+}
+
+/* 🔥 新增：单个德语字母 - 动态 */
+.font-german-a {
+    position: absolute;
+    top: 110vh;
+    left: 60vw;
+    width: 200px;
+    height: 200px;
+    z-index: 14;
+}
+
+.font-german-o {
+    position: absolute;
+    top: 260vh;
+    right: 15vw;
+    width: 180px;
+    height: 180px;
+    z-index: 13;
+}
+
+.font-german-ss {
+    position: absolute;
+    top: 340vh;
+    left: 20vw;
+    width: 190px;
+    height: 190px;
+    z-index: 12;
+}
+
+/* 🔥 新增：数字 - 动态和静态混合 */
+.font-number-1 {
+    position: absolute;
+    top: 50vh;
+    left: 65vw;
+    width: 160px;
+    height: 160px;
+    z-index: 11;
+}
+
+.font-number-2 {
+    position: absolute;
+    top: 140vh;
+    left: 15vw;
+    width: 170px;
+    height: 170px;
+    z-index: 12;
+}
+
+.font-number-3 {
+    position: absolute;
+    top: 290vh;
+    left: 50vw;
+    width: 200px;
+    height: 200px;
+    z-index: 13;
+}
+
+.font-number-4 {
+    position: absolute;
+    top: 380vh;
+    right: 10vw;
+    width: 180px;
+    height: 180px;
+    z-index: 11;
+}
+
+/* 🔥 新增：随机字母分布 */
+.font-random-r {
+    position: absolute;
+    top: 70vh;
+    left: 10vw;
+    width: 220px;
+    height: 220px;
+    z-index: 14;
+}
+
+.font-random-e {
+    position: absolute;
+    top: 180vh;
+    right: 20vw;
+    width: 190px;
+    height: 190px;
+    z-index: 13;
+}
+
+.font-random-p {
+    position: absolute;
+    top: 310vh;
+    left: 40vw;
+    width: 210px;
+    height: 210px;
+    z-index: 12;
+}
+
+.font-random-t {
+    position: absolute;
+    top: 130vh;
+    right: 8vw;
+    width: 175px;
+    height: 175px;
+    z-index: 11;
+}
+
+.font-random-a {
+    position: absolute;
+    top: 240vh;
+    left: 65vw;
+    width: 185px;
+    height: 185px;
+    z-index: 14;
+}
+
+.font-random-star {
+    position: absolute;
+    top: 360vh;
+    left: 55vw;
+    width: 195px;
+    height: 195px;
+    z-index: 13;
+}
+
+/* 🔥 修改：动态字体动画 - 移除旋转，使用参数动画 */
+.font-item.animated {
+    /* 不使用 CSS 旋转，由 JS 控制参数动画 */
+}
+
+/* 🔥 修改：v-1.png 图片容器 - 增加调试和兼容性 */
+.v1-image-container {
+    position: absolute;
+    top: 20vh;
+    left: 0;
+    width: 100vw;
+    height: 76vh;
+    z-index: 3;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* 🔥 新增：调试边框（开发时可见，上线前删除） */
+    /* border: 1px solid red; */
+}
+
+.v1-image-container img {
+    width: auto;
+    max-width: 90%; /* 🔥 新增：限制最大宽度 */
+    height: auto;
+    max-height: 90%; /* 🔥 修改：限制最大高度 */
+    object-fit: contain;
+    mix-blend-mode: normal;
+    opacity: 1;
+    filter: brightness(1) invert(0);
+    display: block; /* 🔥 新增：确保图片显示为块级元素 */
+}
+
+/* 🔥 新增：如果图片加载失败，显示占位符 */
+.v1-image-container img[src=""],
+.v1-image-container img:not([src]) {
+    display: none;
+}
+
+/* 🔥 完全重写：字体布局系统 - 简洁清晰 */
+
+/* === 第1-2行圆点之间（20vh - 96vh）=== */
+
+/* PNG 区域左侧 * 字符（动态）*/
+.font-star-left {
+    position: absolute;
+    top: 58vh; /* 🔥 PNG 区域垂直居中 */
+    left: 10vw;
+    width: 100px;
+    height: 100px;
+    z-index: 18;
+}
+
+/* PNG 区域右侧 * 字符（动态）*/
+.font-star-right {
+    position: absolute;
+    top: 58vh; /* 🔥 PNG 区域垂直居中 */
+    right: 10vw;
+    width: 100px;
+    height: 100px;
+    z-index: 18;
+}
+
+/* === 第2-3行圆点之间（96vh - 172vh）=== */
+
+/* 单词：HALLO :)（撑满6个圆点）*/
+.font-word-hallo {
+    position: absolute;
+    top: 96vh;
+    left: 5vw;
+    width: calc(100vw - 10vw);
+    height: 76vh;
+    z-index: 16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* === 第3-4行圆点之间（172vh - 248vh）=== */
+
+/* 单词：GUTEN TAG!（撑满6个圆点）*/
+.font-word-guten {
+    position: absolute;
+    top: 172vh;
+    left: 5vw;
+    width: calc(100vw - 10vw);
+    height: 76vh;
+    z-index: 16;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 🔥 删除：移除所有其他字体样式 */
+/* 只保留上述5个元素 */
+
+/* 🔥 新增：字体容器通用样式 */
+.font-item {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+.font-item svg {
+    width: 100%;
+    height: 100%;
+    mix-blend-mode: difference;
+    overflow: visible;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .top-nav {
+        top: 20px;
+        padding: 0 20px;
+        font-size: 12px;
+    }
+    
+    .dots-container {
+        gap: 12vw 8vw;
+        max-width: 90vw;
+        padding: 100px 5vw 40px;
+    }
+    
+    .dot {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .dot {
+        width: 16px;
+        height: 16px;
+    }
+}

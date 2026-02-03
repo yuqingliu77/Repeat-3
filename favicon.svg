@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#000"/>
+  
+  <defs>
+    <!-- 定义蒙版：两个圆交叠产生差值 -->
+    <mask id="circleMask">
+      <rect width="512" height="512" fill="#000"/>
+      <!-- 左圆（白色 = 显示）-->
+      <circle cx="200" cy="256" r="150" fill="#fff"/>
+      <!-- 右圆（白色 = 显示）-->
+      <circle cx="312" cy="256" r="150" fill="#fff"/>
+      <!-- 交叠部分（黑色 = 隐藏，产生差值空白）-->
+      <circle cx="200" cy="256" r="150" fill="#000" mask="url(#rightCircle)"/>
+    </mask>
+    
+    <mask id="rightCircle">
+      <rect width="512" height="512" fill="#000"/>
+      <circle cx="312" cy="256" r="150" fill="#fff"/>
+    </mask>
+  </defs>
+  
+  <!-- 应用蒙版 -->
+  <rect width="512" height="512" fill="#fff" mask="url(#circleMask)"/>
+</svg>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repeat*3</title>
+    <!-- 🔥 新增：favicon -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <link rel="stylesheet" href="./styles/home.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <nav class="top-nav">
+        <a href="index.html" class="nav-link nav-left">Repeat*3</a>
+        <a href="font-tool.html" class="nav-link nav-center">Type Tool</a>
+        <a href="visuals.html" class="nav-link nav-right">Visuals</a>
+    </nav>
+
+    <!-- 🔥 确保元素顺序正确，bottom-spacer 在最底部 -->
+
+    <!-- 底部装饰图像 - 上方大 PNG -->
+    <img src="./repeat3-left.png" alt="" class="bottom-image left">
+
+    <!-- 新增：三个 form 图片 - 在两个大 PNG 中间 -->
+    <div class="form-images-container">
+        <img src="./form-1.png" alt="Form 1" class="form-image">
+        <img src="./form-2.png" alt="Form 2" class="form-image">
+        <img src="./form-3.png" alt="Form 3" class="form-image">
+    </div>
+
+    <!-- 底部装饰图像 - 下方大 PNG -->
+    <img src="./repeat3-right.png" alt="" class="bottom-image right">
+
+    <!-- 可拖动、可缩放的椭圆形文字框 -->
+    <div class="draggable-text-frame" id="text-frame">
+        <!-- 拖动提示文字 -->
+        <div class="frame-move-tooltip">Move</div>
+        
+        <div class="frame-content" id="frame-content">
+            <p><strong>Repeat*3</strong> is an experimental typographic system that treats letterforms not as carriers of language, but as evolving visual structures.</p>
+            <p>Through repetition, rotation, symmetry, and layered interpolation, characters are continuously generated and transformed into dynamic, multi-layered compositions.</p>
+            <p>Built within a code-driven framework, letters and numbers gradually move beyond legibility, becoming abstract forms defined by rhythm, spatial depth, and structural tension.</p>
+            <p>Rather than producing a stable typeface, <strong>Repeat*3</strong> operates as an open field for exploring expressive, visually driven typography.</p>
+            <p>It is particularly suited to experimental layouts, visual identities, digital media, and typographic compositions where form and structure take precedence over readability.</p>
+        </div>
+        
+        <!-- 🔥 新增：底部署名 - 放在椭圆框底部 -->
+        <div class="frame-signature">Yuqing Liu</div>
+        
+        <!-- 🔥 十字细线缩放手柄 + 提示文字 -->
+        <div class="resize-handle-cross" id="resize-handle">
+            <div class="cross-line horizontal"></div>
+            <div class="cross-line vertical"></div>
+            <div class="resize-handle-tooltip">Scale Handle</div>
+        </div>
+    </div>
+
+    <!-- 🔥 删除：底部生成文字区域 -->
+    <!-- <div class="generated-text-section">
+        <svg id="generated-text-svg" viewBox="0 0 1600 400" preserveAspectRatio="xMidYMid meet">
+        </svg>
+    </div> -->
+
+    <!-- 底部空白占位区域，提供滚动空间 -->
+    <div class="bottom-spacer"></div>
+
+    <script src="./scripts/home.js"></script>
+</body>
+</html>

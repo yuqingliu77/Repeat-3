@@ -1,0 +1,110 @@
+/* ...existing code... */
+
+:root {
+    --foreground-color: #000;
+    --background-color: #fff;
+}
+
+body.dark-theme {
+    --foreground-color: #fff;
+    --background-color: #000;
+}
+
+/* 全局强制 LTR */
+* {
+    direction: ltr !important;
+}
+
+/* Range slider - 强制左到右方向 */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1px;
+    outline: none;
+    direction: ltr !important;
+    transform: scaleX(1) !important; /* 防止被水平翻转 */
+    -webkit-transform: scaleX(1) !important;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1px;
+    height: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 0;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 1px;
+    height: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 0;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 1px;
+    direction: ltr !important;
+}
+
+input[type="range"]::-moz-range-track {
+    height: 1px;
+    border: none;
+    direction: ltr !important;
+}
+
+/* 黑底白线 */
+body.dark input[type="range"],
+body[style*="black"] input[type="range"] {
+    background: white;
+}
+
+body.dark input[type="range"]::-webkit-slider-thumb,
+body[style*="black"] input[type="range"]::-webkit-slider-thumb {
+    background: white;
+}
+
+body.dark input[type="range"]::-moz-range-thumb,
+body[style*="black"] input[type="range"]::-moz-range-thumb {
+    background: white;
+}
+
+body.dark input[type="range"]::-moz-range-track,
+body[style*="black"] input[type="range"]::-moz-range-track {
+    background: white;
+}
+
+/* 白底黑线 */
+body.light input[type="range"],
+body[style*="white"] input[type="range"] {
+    background: black;
+}
+
+body.light input[type="range"]::-webkit-slider-thumb,
+body[style*="white"] input[type="range"]::-webkit-slider-thumb {
+    background: black;
+}
+
+body.light input[type="range"]::-moz-range-thumb,
+body[style*="white"] input[type="range"]::-moz-range-thumb {
+    background: black;
+}
+
+body.light input[type="range"]::-moz-range-track,
+body[style*="white"] input[type="range"]::-moz-range-track {
+    background: black;
+}
+
+/* 🔥 删除：放大镜缩放控制按钮样式 */
+
+/* 🔥 删除：左下角十字装饰样式（错误创建的） */
+/* 移除以下所有样式块：
+   .cross-decoration.bottom-left
+   .cross-decoration.bottom-right
+   相关的 :hover 和 :active 样式
+*/
+
+/* ...existing code... */

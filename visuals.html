@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repeat*3</title>
+    <link rel="stylesheet" href="styles/visuals.css">
+    
+    <!-- 🔥 修改：完善 favicon 引入，确保浏览器兼容性 -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" type="image/png" href="favicon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+</head>
+<body>
+    <!-- 顶部导航 - 与首页完全一致 -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <a href="index.html" class="nav-link">Repeat*3</a>
+        </div>
+        <div class="nav-center">
+            <a href="font-tool.html" class="nav-link">Type Tool</a>
+        </div>
+        <div class="nav-right">
+            <a href="visuals.html" class="nav-link active">Visuals</a>
+        </div>
+    </nav>
+
+    <!-- 圆点网格容器 -->
+    <div class="dots-container">
+        <!-- 12个圆点（4行 × 3列） -->
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+
+    <!-- v-1.png 图片 - 第1-2行圆点之间 -->
+    <div class="v1-image-container">
+        <img src="./images/v-1.png" alt="Visual 1" onerror="this.onerror=null; this.src='./v-1.png'; if(this.complete && !this.naturalHeight) this.style.display='none';">
+    </div>
+
+    <!-- PNG区域左侧 * 字符（动态） -->
+    <div class="font-star-left font-item"></div>
+
+    <!-- PNG区域右侧 * 字符（动态） -->
+    <div class="font-star-right font-item"></div>
+
+    <!-- 单词：HALLO :)（第2-3行圆点之间） -->
+    <div class="font-word-hallo font-item"></div>
+
+    <!-- 单词：GUTEN TAG!（第3-4行圆点之间） -->
+    <div class="font-word-guten font-item"></div>
+
+    <!-- 引入字体数据和渲染脚本 -->
+    <script src="vendor/lodash.js"></script>
+    <script src="scripts/font.js"></script>
+    <script src="scripts/renderPixel.js"></script>
+    <script src="scripts/visuals-animation.js"></script>
+</body>
+</html>

@@ -1,0 +1,903 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family:'Courier New', Courier, monospace;
+    font-size: 12px;
+    box-sizing: border-box;
+}
+
+/* 自定义光标 - 圆点效果 */
+body {
+    cursor: none; /* 隐藏默认光标 */
+}
+
+/* 自定义光标圆点 */
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference; /* 正片叠底效果 */
+    transition: transform 0.1s ease;
+}
+
+.custom-cursor.clicking {
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* 隐藏页面滚动条 */
+html, body {
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+}
+
+#container{
+    display: grid;
+    grid-template-columns: 1fr 250px 25px; /* 修改:渐变条宽度25px */
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+}
+
+#container.controls-hidden{
+    grid-template-columns: 1fr 0px 25px; /* 修改:隐藏控制面板时保留渐变条 */
+}
+
+/* 修改:右下角控制按钮 - 放置在渐变条下方 */
+#show-controls-btn{
+    position: fixed;
+    right: 5px; /* 与渐变条右对齐，渐变条25px + (40-25)/2 = 12.5px，取5px使其居中 */
+    bottom: 20px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: default;
+    z-index: 1000;
+    display: none;
+    transition: all 0.3s ease;
+    padding: 0;
+    color: rgba(128, 128, 128, 0.7);
+}
+
+#show-controls-btn svg{
+    width: 100%;
+    height: 100%;
+    /* 删除阴影效果 */
+}
+
+#show-controls-btn:hover{
+    transform: scale(1.1) rotate(180deg);
+    color: rgba(128, 128, 128, 1);
+}
+
+#show-controls-btn.visible{
+    display: block;
+}
+
+/* 修改:播放动画按钮 - 放置在渐变条上方 */
+#play-animation-btn{
+    position: fixed;
+    right: 5px;
+    top: 20px;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer; /* 🔥 修改：从 default 改为 pointer */
+    z-index: 1000;
+    transition: all 0.3s ease;
+    padding: 0;
+    color: rgba(128, 128, 128, 0.7);
+    pointer-events: auto; /* 🔥 新增：确保可点击 */
+}
+
+#play-animation-btn svg{
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    pointer-events: none; /* 🔥 新增：SVG 不拦截点击 */
+}
+
+#play-animation-btn:hover{
+    transform: scale(1.1);
+    color: rgba(128, 128, 128, 1);
+    cursor: pointer; /* 🔥 确保悬停时显示指针 */
+}
+
+#play-animation-btn.playing{
+    color: #ff6600; /* 播放时使用橙色高亮 */
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+}
+
+#preview, #typing{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    position: relative;
+}
+
+/* 确保字体显示区域真正居中且完整显示 */
+#typing {
+    align-items: center;
+    justify-content: center;
+    /* 使用transform来补偿右侧面板，实现真正的视觉居中 */
+    /* 右侧控制面板 250px + 渐变条 25px = 275px */
+    /* 向左移动 275px/2 = 137.5px 来视觉居中 */
+    padding: 60px;
+}
+
+#typing svg {
+    width: 100%;
+    max-width: calc(100% - 120px); /* 减去左右padding */
+    height: auto;
+    max-height: calc(100vh - 200px); /* 限制最大高度，留出上下空间 */
+    display: block;
+    margin: 0 auto;
+    /* 使用transform来实现视觉居中，补偿右侧控制面板 */
+    transform: translateX(-68.75px); /* (250px + 25px) / 4，向左移动来居中 */
+}
+
+#main{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    overflow: auto;
+    position: relative;
+}
+
+/* 十字装饰线 */
+.cross-decoration{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    z-index: 1000;
+    color: #000000; /* 默认黑色（白底时） */
+    mix-blend-mode: difference;
+}
+
+/* 黑色背景时的十字线颜色 */
+#main[style*="background-color: rgb(0, 0, 0)"] .cross-decoration,
+#main[style*="background-color:#000000"] .cross-decoration,
+#main[style*="background-color: #000000"] .cross-decoration {
+    color: #ffffff; /* 黑底时用白色 */
+}
+
+.cross-decoration::before,
+.cross-decoration::after{
+    content: '';
+    position: absolute;
+    background: currentColor;
+}
+
+.cross-decoration::before{
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cross-decoration::after{
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* 上方位置 */
+.cross-decoration.top{
+    top: 20px;
+}
+
+.cross-decoration.top.left{
+    left: 20px;
+}
+
+.cross-decoration.top.center{
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cross-decoration.top.right{
+    right: 20px;
+}
+
+/* 下方位置 */
+.cross-decoration.bottom{
+    bottom: 20px;
+}
+
+.cross-decoration.bottom.left{
+    left: 20px;
+}
+
+.cross-decoration.bottom.center{
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cross-decoration.bottom.right{
+    right: 20px;
+}
+
+svg{
+    overflow: visible;
+    width: 100%;
+    height: 100%;
+    /* border: 1px solid red; */
+}
+
+/* 主显示区域的SVG完整显示且居中 */
+#svg-text {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 100%; /* 使用百分比而非固定值 */
+    max-width: 100%;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+}
+
+.grid line{
+    stroke: none    ;
+}
+
+svg.showGrid .grid line{
+    stroke: gray !important;
+}
+
+aside{
+    border-left: 1px solid rgba(128, 128, 128, 0.3);
+    border-right: 1px solid rgba(128, 128, 128, 0.3); /* 新增:右边框 */
+    position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+aside.hidden{
+    width: 0 !important;
+    min-width: 0 !important;
+    border: none;
+    overflow: hidden; /* 确保所有内容都被隐藏 */
+    padding: 0;
+    margin: 0;
+}
+
+/* 隐藏toggle-controls按钮和controls-wrapper，当aside隐藏时 */
+aside.hidden #toggle-controls,
+aside.hidden #controls-wrapper,
+aside.hidden *{
+    display: none !important;
+    visibility: hidden !important;
+}
+
+#toggle-controls{
+    padding: 10px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3); /* 统一边框粗细 */
+    cursor: default;
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+    flex-shrink: 0;
+    display: none; /* 隐藏三角icon按钮 */
+}
+
+#toggle-controls:hover{
+    opacity: 0.7;
+}
+
+#controls-wrapper{
+    padding: 10px;
+    padding-top: 0; /* 小视图上移，移除顶部padding */
+    padding-bottom: 0; /* 为底部渐变条留空间 */
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    transition: opacity 0.3s ease, width 0.3s ease;
+    position: relative;
+}
+
+/* 修改:完全隐藏滚动条 */
+#controls-wrapper::-webkit-scrollbar {
+    display: none; /* 完全隐藏 */
+}
+
+/* Firefox 完全隐藏滚动条 */
+#controls-wrapper {
+    scrollbar-width: none; /* 完全隐藏 */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+#controls-wrapper.hidden{
+    opacity: 0;
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+aside h2{
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+#font-preview{
+    flex-shrink: 0;
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3); /* 统一边框粗细 */
+    padding: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+#font-preview svg{
+    max-width: 100%;
+    max-height: 100%;
+    overflow: visible;
+}
+
+#svg-preview{
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+#controls{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#controls label{
+    display: block;
+    padding-top: 10px;
+    font-size: 11px;
+    word-break: break-word;
+}
+
+#controls input{
+    width: 100%;
+}
+
+#controls select{
+    width: 100%;
+    padding: 5px;
+    background: transparent;
+    border: 0.3px solid currentColor; /* 🔥 从 1px 改为 0.3px */
+    color: inherit;
+    font-size: 11px;
+    cursor: default;
+    box-shadow: none !important; /* 强制移除阴影 */
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#controls select:focus,
+#controls select:active{
+    box-shadow: none !important; /* 焦点状态也不显示阴影 */
+    outline: none !important;
+}
+
+#controls select option,
+#controls select optgroup{
+    background: inherit;
+    color: inherit;
+    box-shadow: none !important; /* 选项也不显示阴影 */
+}
+
+#footer{
+    position: absolute;
+    bottom: 0;
+    left: 60px; /* 从左侧60px开始，避免与左下角十字线重叠 */
+    right: 0;
+    z-index: 100;
+    cursor: default;
+    padding: 20px;
+}
+
+#input-text {
+    width: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: inherit;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    resize: none;
+    overflow: hidden;
+    min-height: 20px;
+    caret-color: currentColor; /* 光标颜色与文字颜色一致 */
+    cursor: text; /* 显示文本输入光标 */
+    line-height: 1.5;
+}
+
+#input-text:focus {
+    outline: none;
+    caret-color: currentColor;
+}
+
+/* 光标闪烁动画 - 更明显的闪烁效果 */
+@keyframes blink {
+    0%, 49% { 
+        caret-color: currentColor;
+    }
+    50%, 100% { 
+        caret-color: transparent;
+    }
+}
+
+#input-text {
+    animation: blink 1s step-start infinite;
+}
+
+/* 增强光标在不同背景下的可见性 */
+body[style*="background-color: rgb(0, 0, 0)"] #input-text,
+body[style*="background-color:#000000"] #input-text,
+body[style*="background-color: #000000"] #input-text {
+    caret-color: #fff;
+}
+
+body[style*="background-color: rgb(255, 255, 255)"] #input-text,
+body[style*="background-color:#ffffff"] #input-text,
+body[style*="background-color: #ffffff"] #input-text {
+    caret-color: #000;
+}
+
+#input-text::placeholder {
+    color: inherit;
+    opacity: 0.5;
+}
+
+
+
+/* Styling sliders - 横线与背景同色，圆点与文字同色 */
+
+input[type=range] {
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    background: #ffffff; /* 默认白色轨道（白底） */
+    height: 1px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; 
+    margin-top: -5px; /* 垂直居中 */
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #000000; /* 默认黑色圆点 */
+    cursor: default;
+}
+
+input[type=range]::-moz-range-track {
+    background: #ffffff; /* 默认白色轨道（白底） */
+    height: 1px;
+}
+
+input[type=range]::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #000000; /* 默认黑色圆点 */
+    border: none;
+    cursor: default;
+}
+
+/* 黑色背景时的样式 */
+#aside[style*="background-color: rgb(0, 0, 0)"] input[type=range]::-webkit-slider-runnable-track,
+#aside[style*="background-color:#000000"] input[type=range]::-webkit-slider-runnable-track,
+#aside[style*="background-color: #000000"] input[type=range]::-webkit-slider-runnable-track {
+    background: #000000; /* 黑色轨道（黑底） */
+}
+
+#aside[style*="background-color: rgb(0, 0, 0)"] input[type=range]::-webkit-slider-thumb,
+#aside[style*="background-color:#000000"] input[type=range]::-webkit-slider-thumb,
+#aside[style*="background-color: #000000"] input[type=range]::-webkit-slider-thumb {
+    background: #ffffff; /* 白色圆点 */
+}
+
+#aside[style*="background-color: rgb(0, 0, 0)"] input[type=range]::-moz-range-track,
+#aside[style*="background-color:#000000"] input[type=range]::-moz-range-track,
+#aside[style*="background-color: #000000"] input[type=range]::-moz-range-track {
+    background: #000000; /* 黑色轨道（黑底） */
+}
+
+#aside[style*="background-color: rgb(0, 0, 0)"] input[type=range]::-moz-range-thumb,
+#aside[style*="background-color:#000000"] input[type=range]::-moz-range-thumb,
+#aside[style*="background-color: #000000"] input[type=range]::-moz-range-thumb {
+    background: #ffffff; /* 白色圆点 */
+}
+
+/* Color input styling */
+input[type=color]{
+    width: 50px;
+    height: 30px;
+    border: 2px solid;
+    border-color: var(--slider-color, #000);
+    border-radius: 4px;
+    cursor: default;
+    padding: 2px;
+}
+
+input[type=color]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type=color]::-webkit-color-swatch {
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 2px;
+}
+
+input[type=color]::-moz-color-swatch {
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    border-radius: 2px;
+}
+
+/* 修改:渐变色条样式 - 垂直居中,上下与按钮间距相同 */
+#color-gradient-bar{
+    width: 25px;
+    height: 100%;
+    position: fixed; /* 改为fixed定位 */
+    right: 0;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    z-index: 999; /* 略低于按钮 */
+    /* 删除边框 - 防止与右下角icon重叠 */
+}
+
+#color-gradient-bar::before{
+    content: '';
+    width: 100%;
+    height: 250px;
+    background: linear-gradient(
+        to bottom,
+        #ffffff 0%,
+        #ff0000 10%,
+        #ff6600 20%,
+        #ffcc00 30%,
+        #00ff00 40%,
+        #00ffff 50%,
+        #0066ff 60%,
+        #6600ff 70%,
+        #cc00ff 80%,
+        #ff0099 90%,
+        #000000 100%
+    );
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+}
+
+/* 修改:隐藏滑块 */
+#gradient-slider{
+    display: none; /* 完全隐藏滑块 */
+}
+
+/* 新增:控制面板底部黑白切换按钮 */
+#panel-gradient-bar{
+    width: 100%;
+    height: 60px;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    background: transparent;
+    border-top: 1px solid rgba(128, 128, 128, 0.3);
+    margin-top: 10px; /* 与下载按钮的margin-bottom保持一致的间距 */
+    margin-bottom: 10px; /* 底部间距,保持上下一致 */
+    cursor: default;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#panel-gradient-bar svg{
+    width: 50px;
+    height: 50px;
+    transition: opacity 0.2s;
+}
+
+#panel-gradient-bar:hover svg{
+    opacity: 0.7;
+}
+
+/* 新增：右下角控制按钮的提示文字 - 上方 */
+#show-controls-btn::before {
+    content: 'Controls';
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%); /* 🔥 移除旋转，保持文字正向 */
+    font-size: 9px;
+    color: rgba(128, 128, 128, 0.7);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease; /* 🔥 只过渡透明度，不过渡 transform */
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+}
+
+#show-controls-btn:hover::before {
+    opacity: 1;
+    /* 🔥 删除：不改变 transform，文字始终保持正向 */
+}
+
+/* 新增：右上角播放按钮的提示文字 - 下方 */
+#play-animation-btn::after {
+    content: 'Video';
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 9px;
+    color: rgba(128, 128, 128, 0.7);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+}
+
+#play-animation-btn:hover::after {
+    opacity: 1;
+}
+
+/* 🔥 新增：十字装饰链接容器 */
+.cross-decoration-link {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    text-decoration: none;
+    z-index: 1001; /* 🔥 确保在最上层 */
+    cursor: pointer !important; /* 🔥 强制指针光标 */
+    transition: opacity 0.3s ease;
+    pointer-events: auto !important; /* 🔥 强制可点击 */
+}
+
+.cross-decoration-link:hover {
+    opacity: 0.7; /* 🔥 悬停时透明度降低 */
+}
+
+/* 🔥 修改：十字装饰线位置 - 上方位置（导航链接） */
+.cross-decoration-link.top {
+    top: 20px;
+    pointer-events: auto !important; /* 🔥 确保顶部链接可点击 */
+}
+
+.cross-decoration-link.top.left {
+    left: 20px;
+}
+
+.cross-decoration-link.top.center {
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cross-decoration-link.top.right {
+    right: 20px;
+}
+
+/* 🔥 新增：悬停提示文字 */
+.cross-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 8px;
+    padding: 0; /* 🔥 移除内边距 */
+    font-size: 10px;
+    white-space: nowrap;
+    color: #000000;
+    background: none; /* 🔥 移除背景 */
+    border: none; /* 🔥 移除边框 */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.05em;
+    z-index: 1002;
+}
+
+/* 🔥 黑色背景时的提示框 */
+#main[style*="background-color: rgb(0, 0, 0)"] .cross-tooltip,
+#main[style*="background-color:#000000"] .cross-tooltip,
+#main[style*="background-color: #000000"] .cross-tooltip {
+    background: none; /* 🔥 移除背景 */
+    color: #ffffff;
+    border: none; /* 🔥 移除边框 */
+}
+
+/* 🔥 悬停时显示提示 */
+.cross-decoration-link:hover .cross-tooltip {
+    opacity: 1; /* 🔥 淡入显示 */
+}
+
+/* 🔥 顶部导航十字内部的装饰线（继承颜色） */
+.cross-decoration-link .cross-decoration {
+    pointer-events: none; /* 🔥 装饰线本身不响应点击 */
+    color: #000000; /* 🔥 默认黑色 */
+}
+
+/* 🔥 黑色背景时的十字线颜色 */
+#main[style*="background-color: rgb(0, 0, 0)"] .cross-decoration-link .cross-decoration,
+#main[style*="background-color:#000000"] .cross-decoration-link .cross-decoration,
+#main[style*="background-color: #000000"] .cross-decoration-link .cross-decoration {
+    color: #ffffff; /* 🔥 黑底时用白色 */
+}
+
+/* 十字装饰线 - 底部（非链接，用于缩放） */
+.cross-decoration {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none; /* 🔥 底部装饰默认不可点击 */
+    z-index: 1000;
+    color: #000000;
+}
+
+/* 🔥 新增：底部中间十字的特殊样式 - 只显示横线和上半竖线 */
+.cross-decoration.bottom.center::before {
+    /* 竖线只显示上半部分 */
+    height: 50% !important;
+    top: 0 !important;
+    bottom: auto !important;
+}
+
+.cross-decoration.bottom.center::after {
+    /* 横线保持完整 */
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* 🔥 新增：全局隐藏滚动条 */
+* {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+*::-webkit-scrollbar {
+    display: none; /* Webkit */
+}
+
+/* 🔥 修改：Download 按钮容器 - 左右间距完全一致 */
+#download-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px; /* 🔥 左右各 20px */
+    margin: 15px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#btn-download-font {
+    width: 100%;
+    padding: 10px 16px;
+    margin: 0;
+    background: transparent;
+    color: currentColor;
+    border: 0.3px solid currentColor; /* 🔥 从 1px 改为 0.3px */
+    cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: opacity 0.3s ease;
+    box-sizing: border-box;
+    box-shadow: none;
+}
+
+#btn-download-font:hover {
+    opacity: 0.7;
+}
+
+#btn-download-font:active {
+    opacity: 0.5;
+}
+
+/* 🔥 完全重写：Type 输入框样式 - 细线框 + 统一字体大小 */
+#type-input-container {
+    width: 100%;
+    padding: 0 20px;
+    margin-top: 15px;
+    box-sizing: border-box;
+}
+
+#type-input {
+    width: 100%;
+    padding: 10px 12px;
+    margin: 0;
+    box-sizing: border-box;
+    border: 0.3px solid currentColor; /* 🔥 从 1px 改为 0.3px */
+    background: transparent;
+    color: currentColor;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    resize: vertical;
+    min-height: 60px;
+    outline: none;
+    box-shadow: none;
+}
+
+#type-input:focus {
+    border-color: currentColor;
+    outline: none;
+}
+
+/* 修改：右下角控制按钮 - 移除 ::before 伪元素的提示 */
+#show-controls-btn::before {
+    display: none; /* 🔥 完全隐藏伪元素 */
+}
+
+/* 🔥 新增：独立的提示文字元素（不受按钮旋转影响）*/
+.controls-btn-tooltip {
+    position: fixed; /* 🔥 使用 fixed 定位，独立于按钮 */
+    right: 5px;
+    bottom: calc(20px + 40px + 8px); /* 🔥 按钮底部 + 按钮高度 + 间距 */
+    font-size: 9px;
+    color: rgba(128, 128, 128, 0.7);
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+    z-index: 1001; /* 🔥 确保在按钮上方 */
+    text-align: center;
+    transform-origin: center center; /* 🔥 确保不旋转 */
+}
+
+/* 🔥 悬停按钮时显示提示 */
+#show-controls-btn:hover + .controls-btn-tooltip,
+#show-controls-btn:hover ~ .controls-btn-tooltip {
+    opacity: 1;
+}

@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.container {
+    position: relative;
+    width: 100vw;
+    min-height: 2500px;
+    background-color: #000;
+}
+
+/* 方框样式 */
+.box {
+    position: absolute;
+    border: 1px solid #888;
+    background-color: transparent;
+}
+
+/* 装饰元素 */
+.decoration {
+    position: absolute;
+    z-index: 10;
+}
+
+/* 实心圆 */
+.circle {
+    width: 12px;
+    height: 12px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+
+.circle.small {
+    width: 8px;
+    height: 8px;
+}
+
+.circle.tiny {
+    width: 4px;
+    height: 4px;
+}
+
+/* 十字 */
+.cross {
+    width: 20px;
+    height: 20px;
+    position: relative;
+}
+
+.cross::before,
+.cross::after {
+    content: '';
+    position: absolute;
+    background-color: #888;
+}
+
+.cross::before {
+    width: 1px;
+    height: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.cross::after {
+    width: 20px;
+    height: 1px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .container {
+        min-height: 3500px;
+    }
+    
+    .box {
+        width: 80% !important;
+        position: relative !important;
+        left: 10% !important;
+        right: auto !important;
+        margin-bottom: 30px;
+        top: auto !important;
+    }
+}

@@ -1,0 +1,66 @@
+/* Layout 按钮组样式 */
+.layout-button-group {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 5px;
+}
+
+.layout-button {
+    flex: 1;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: none !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    cursor: default;
+    line-height: 1;
+    text-align: center;
+    transition: opacity 0.2s ease;
+    font-family: 'Courier New', Courier, monospace;
+    min-height: 20px;
+    min-width: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.layout-button:focus,
+.layout-button:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: none !important;
+}
+
+.layout-button svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.layout-button:hover {
+    opacity: 1;
+    background: none !important;
+    border: none !important;
+    filter: none !important;
+}
+
+.layout-button.active {
+    opacity: 1;
+    background: none !important;
+    border: none !important;
+}
+
+.layout-button:active {
+    transform: scale(0.95);
+    background: none !important;
+    border: none !important;
+}

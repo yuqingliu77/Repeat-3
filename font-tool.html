@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repeat*3</title>
+    <!-- 🔥 新增：favicon -->
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <!-- Importing the styles -->
+    <link rel="stylesheet" href="styles.css"></link>
+</head>
+<body>
+    <div id="container">
+        <!-- Your Contents -->
+        <main id="main">
+            
+            <!-- 🔥 顶部导航十字 - 确保结构正确 -->
+            <a href="index.html" class="cross-decoration-link top left">
+                <div class="cross-decoration"></div>
+                <span class="cross-tooltip">Repeat*3</span>
+            </a>
+            
+            <a href="font-tool.html" class="cross-decoration-link top center">
+                <div class="cross-decoration"></div>
+                <span class="cross-tooltip">Type Tool</span>
+            </a>
+            
+            <a href="visuals.html" class="cross-decoration-link top right">
+                <div class="cross-decoration"></div>
+                <span class="cross-tooltip">Visuals</span>
+            </a>
+   
+            <!-- Preview glyph -->
+            <section id="typing" contenteditable="true">
+                <svg viewBox="0 0 1000 1000" id="svg-text" ><!-- <defs>
+
+                    </defs> -->
+
+                </svg>
+
+            </section>
+
+
+            <!--  -->
+            <footer id="footer">
+                <textarea id="input-text" placeholder="Type…" aria-label="Type text" rows="1"></textarea>
+            </footer>
+            
+            <!-- 底部十字 - 用于缩放 -->
+            <div class="cross-decoration bottom left"></div>
+            <div class="cross-decoration bottom center">
+                <!-- 🔥 新增：底部中间十字的提示 -->
+                <span class="cross-tooltip" style="opacity: 0;">Reset Size</span>
+            </div>
+            <div class="cross-decoration bottom right"></div>
+        </main>
+
+        <!-- 🔥 修改：右下角按钮 + 独立提示文字 -->
+        <button id="show-controls-btn">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+                <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="50" cy="50" r="32" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="50" cy="50" r="24" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="50" cy="50" r="16" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="50" cy="50" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="10" y1="50" x2="90" y2="50" stroke="currentColor" stroke-width="2"/>
+                <line x1="50" y1="10" x2="50" y2="90" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </button>
+        
+        <!-- 🔥 新增：独立的提示文字元素 -->
+        <div class="controls-btn-tooltip">Controls</div>
+        
+        <!-- 🔥 修改：右上角播放动画按钮 -->
+        <button id="play-animation-btn">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+                <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="2"/>
+                <line x1="5" y1="50" x2="95" y2="50" stroke="currentColor" stroke-width="2"/>
+                <line x1="50" y1="5" x2="50" y2="95" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </button>
+        
+        <aside id="aside">
+            <button id="toggle-controls">◀</button>
+            <div id="controls-wrapper">
+                
+                <div id="font-preview">
+                    <svg viewBox="0 0 1000 200" id="svg-preview"></svg>
+                </div>
+                
+                <!-- 🔥 修改：删除 GIF 按钮，Download 按钮居中 -->
+                <div id="download-buttons">
+                    <button id="btn-download-font">Download</button>
+                </div>
+                
+                <div id="controls">
+                    <!-- 控制项将通过JavaScript动态生成 -->
+                </div>
+                
+                <!-- 黑白切换按钮 -->
+                <div id="panel-gradient-bar">
+                    <svg viewBox="0 0 100 100" width="50" height="50">
+                        <circle cx="40" cy="50" r="25" fill="#ffffff" stroke="#000000" stroke-width="1.5"/>
+                        <circle cx="60" cy="50" r="25" fill="#000000" stroke="#000000" stroke-width="1.5" style="mix-blend-mode: difference;"/>
+                    </svg>
+                </div>
+                
+                <!-- Type输入框 -->
+                <div id="type-input-container">
+                    <textarea id="type-input" placeholder="Type here..." rows="1"></textarea>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 渐变色条 -->
+        <div id="color-gradient-bar">
+            <div id="gradient-slider"></div>
+        </div>
+    </div>
+    
+    <!-- 🔥 确保脚本按正确顺序加载 -->
+    <script src="vendor/lodash.js"></script>
+    <script src="scripts/font.js"></script>
+    <script src="scripts/renderPixel.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/controls.js"></script>
+    <script type="text/javascript" src="scripts/download.js"></script>
+</body>
+</html>

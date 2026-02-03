@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repeat *3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #000;
+            position: relative;
+        }
+
+        .svg-container {
+            position: fixed;
+            bottom: 0;
+            width: 25vw;
+            height: 25vw;
+        }
+
+        .svg-container.left {
+            left: 0;
+        }
+
+        .svg-container.right {
+            right: 0;
+        }
+
+        .svg-container svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 左侧SVG (*3-01) -->
+    <div class="svg-container left">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1439.32 1439.32">
+            <!-- SVG内容将在这里 -->
+        </svg>
+    </div>
+
+    <!-- 右侧SVG (*3-02) -->
+    <div class="svg-container right">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1439.32 1439.32">
+            <defs>
+                <style>
+                    .cls-1 { mix-blend-mode: difference; }
+                    .cls-2 { isolation: isolate; }
+                    .cls-3 { fill: #fff; }
+                </style>
+            </defs>
+            <g class="cls-2">
+                <g id="svg-text">
+                    <g id="glyph-group">
+                        <!-- ...existing SVG paths from *3-02.svg... -->
+                    </g>
+                </g>
+            </g>
+        </svg>
+    </div>
+</body>
+</html>

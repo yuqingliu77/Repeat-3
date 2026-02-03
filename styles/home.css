@@ -1,0 +1,614 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    scrollbar-width: none; /* 🔥 新增：Firefox 隐藏滚动条 */
+    -ms-overflow-style: none; /* 🔥 新增：IE/Edge 隐藏滚动条 */
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    background-color: #000;
+    color: #fff;
+    font-family: 'Courier New', Courier, monospace;
+    overflow-x: hidden;
+    overflow-y: auto; /* 🔥 修改：从 scroll 改为 auto，隐藏滚动条 */
+    min-height: 100vh;
+    position: relative;
+    cursor: none;
+}
+
+/* 🔥 新增：Webkit 浏览器隐藏滚动条 */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.custom-cursor {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+    transition: transform 0.1s ease, opacity 0.2s ease;
+}
+
+.custom-cursor.clicking {
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* 🔥 修改：顶部导航 - 左中右均匀分布 */
+.top-nav {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 40px;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    mix-blend-mode: difference; /* 🔥 新增：差值混合模式 */
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.nav-link:hover {
+    opacity: 0.6;
+}
+
+/* 🔥 新增：左中右位置对齐 */
+.nav-left {
+    text-align: left;
+    flex: 1;
+}
+
+.nav-center {
+    text-align: center;
+    flex: 1;
+}
+
+.nav-right {
+    text-align: right;
+    flex: 1;
+}
+
+/* 🔥 新增：Repeat*3 标题 - 固定在顶部中间 */
+.page-title {
+    position: fixed;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    font-size: 18px;
+    font-weight: normal;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    user-select: none;
+}
+
+/* 🔥 修改：三个圆垂直交叠排列 - 根据截图调整 */
+.circles-container {
+    position: relative;
+    width: 700px;
+    height: 1600px;
+    transform-origin: center center;
+    transition: transform 0.3s ease-out;
+}
+
+/* 🔥 关键修改：三个圆垂直排列，部分重叠（根据截图） */
+.circle-1 {
+    top: 0;        /* 🔥 最上方 */
+    z-index: 3;
+}
+
+.circle-2 {
+    top: 450px;    /* 🔥 中间（与上圆重叠约 250px） */
+    z-index: 2;
+}
+
+.circle-3 {
+    top: 900px;    /* 🔥 最下方（与中圆重叠约 250px） */
+    z-index: 1;
+}
+
+/* 🔥 新增：可滚动容器 */
+.scroll-container {
+    position: relative;
+    width: 100%;
+    min-height: 200vh; /* 🔥 至少两倍视口高度，确保可以滚动 */
+}
+
+/* 🔥 修改：圆形区域 - 占据第一屏 */
+.circles-section {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 🔥 新增：项目概念区域 - 底部 */
+.concept-section {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px;
+    background: linear-gradient(to bottom, #000 0%, #0a0a0a 100%);
+}
+
+.concept-content {
+    max-width: 800px;
+    width: 100%;
+}
+
+.concept-text {
+    font-size: clamp(14px, 1.8vw, 18px);
+    line-height: 1.8;
+    margin-bottom: 2em;
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1s ease-out forwards;
+}
+
+.concept-text:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.concept-text:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.concept-text:nth-child(3) {
+    animation-delay: 0.6s;
+    margin-bottom: 0;
+}
+
+.concept-text strong {
+    font-weight: 600;
+    letter-spacing: 0.05em;
+}
+
+/* 🔥 新增：淡入上升动画 */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 🔥 删除或隐藏：确保圆形文字区域完全隐藏 */
+.circles-section,
+.circles-container,
+.concept-section {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* 🔥 修改：底部装饰图像 - 调整位置以左右居中 */
+.bottom-image {
+    position: absolute;
+    left: 50%; /* 🔥 修改：从 0 改为 50%，水平居中 */
+    transform: translateX(-50%); /* 🔥 新增：居中偏移 */
+    width: 100vw;
+    height: 100vw;
+    z-index: 50;
+    object-fit: contain;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    opacity: 1;
+}
+
+.bottom-image.left {
+    top: 10vh;
+}
+
+.bottom-image.right {
+    top: calc(10vh + 125vw);
+}
+
+/* 🔥 修改：三个 form 图片容器 - 调整位置以居中 */
+.form-images-container {
+    position: absolute;
+    left: 50%; /* 🔥 修改：从 0 改为 50%，水平居中 */
+    transform: translateX(-50%); /* 🔥 新增：居中偏移 */
+    top: calc(10vh + 102vw);
+    width: 100vw;
+    height: 20vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5vw;
+    z-index: 60;
+    pointer-events: none;
+}
+
+/* 🔥 新增：单个 form 图片样式 */
+.form-image {
+    width: 18vw; /* 🔥 每个 form 的宽度 */
+    height: 18vw;
+    object-fit: contain;
+    mix-blend-mode: difference;
+    opacity: 1;
+    animation: rotateForm 8s linear infinite; /* 🔥 持续旋转动画 */
+}
+
+/* 🔥 为三个 form 添加不同的动画延迟和速度 */
+.form-image:nth-child(1) {
+    animation: rotateForm1 10s linear infinite;
+}
+
+.form-image:nth-child(2) {
+    animation: rotateForm2 12s linear infinite reverse; /* 🔥 反向旋转 */
+}
+
+.form-image:nth-child(3) {
+    animation: rotateForm3 9s linear infinite;
+}
+
+/* 🔥 新增：旋转动画关键帧 */
+@keyframes rotateForm1 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateForm2 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rotateForm3 {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 🔥 修改：椭圆形可拖动文字框 */
+.draggable-text-frame {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 500px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    padding: 80px 30px 60px 30px; /* 🔥 修改：底部增加 padding 以容纳署名 */
+    cursor: move;
+    z-index: 200;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(5px);
+    display: flex;
+    flex-direction: column; /* 🔥 新增：列布局 */
+    align-items: center;
+    justify-content: space-between; /* 🔥 新增：空间分布 */
+    transition: border-color 0.3s ease;
+    user-select: none;
+}
+
+.draggable-text-frame:hover {
+    border-color: rgba(255, 255, 255, 0.9);
+}
+
+.draggable-text-frame.dragging {
+    cursor: grabbing; /* 🔥 拖动时显示抓取光标 */
+    border-color: rgba(255, 255, 255, 1);
+}
+
+/* 🔥 修改：椭圆框内的文字内容 - 完全隐藏滚动条 */
+.frame-content {
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 0.9em;
+    font-size: 10px;
+    line-height: 1.5;
+    color: #fff;
+    text-align: center;
+    padding: 10px 10px;
+    scrollbar-width: none; /* 🔥 Firefox 隐藏滚动条 */
+    -ms-overflow-style: none; /* 🔥 IE/Edge 隐藏滚动条 */
+    cursor: auto;
+}
+
+/* 🔥 修改：Webkit 浏览器完全隐藏滚动条 */
+.frame-content::-webkit-scrollbar {
+    display: none; /* 🔥 完全隐藏，不显示任何滚动条 */
+}
+
+/* 🔥 新增：自定义滚动条样式（Webkit 浏览器） */
+.frame-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.frame-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.frame-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+}
+
+.frame-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* 🔥 重写：底部署名文字 - 放在椭圆框底部 */
+.frame-signature {
+    width: 100%;
+    padding: 15px 0 0 0; /* 🔥 只保留顶部间距 */
+    font-weight: bold;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-align: center;
+    color: #fff;
+    flex-shrink: 0; /* 🔥 防止被压缩 */
+    pointer-events: none;
+}
+
+/* 🔥 完全重写：十字细线缩放手柄 */
+.resize-handle-cross {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 20px;
+    height: 20px;
+    cursor: nwse-resize;
+    pointer-events: auto;
+    opacity: 1; /* 🔥 从 0.7 改为 1，确保清晰可见 */
+    transition: opacity 0.3s ease;
+    z-index: 10;
+    mix-blend-mode: difference; /* ✅ 已有差值混合模式 */
+}
+
+.resize-handle-cross:hover {
+    opacity: 1;
+}
+
+.resize-handle-cross .cross-line {
+    position: absolute;
+    background: #fff;
+    mix-blend-mode: difference; /* 🔥 新增：每条线也添加差值模式，确保在任何背景下都清晰可见 */
+}
+
+.resize-handle-cross .cross-line.horizontal {
+    width: 20px;
+    height: 2px;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.resize-handle-cross .cross-line.vertical {
+    width: 2px;
+    height: 20px;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+}
+
+/* 🔥 修改：缩放手柄提示文字 - 确保差值模式 */
+.resize-handle-tooltip {
+    position: absolute;
+    bottom: -25px;
+    right: -10px;
+    font-size: 9px;
+    color: #fff;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.05em;
+    mix-blend-mode: difference; /* 保持差值模式 */
+    font-weight: bold;
+}
+
+/* 🔥 修改：椭圆框拖动提示文字 - 确保差值模式 */
+.frame-move-tooltip {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 10px;
+    color: #fff;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    mix-blend-mode: difference; /* 保持差值模式 */
+    font-weight: bold;
+}
+
+.draggable-text-frame:hover .frame-move-tooltip {
+    opacity: 1;
+}
+
+/* 🔥 删除：底部生成文字区域相关样式 */
+/* .generated-text-section {
+    position: absolute;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 1600px;
+    z-index: 100;
+    pointer-events: none;
+    transition: transform 0.1s ease-out;
+}
+
+.generated-text-section.tilt-left {
+    transform: translateX(-50%) skewX(-8deg);
+}
+
+.generated-text-section.tilt-right {
+    transform: translateX(-50%) skewX(8deg);
+}
+
+#generated-text-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    mix-blend-mode: difference;
+    filter: none;
+}
+
+#generated-text-svg .text-char {
+    mix-blend-mode: difference;
+}
+
+#generated-text-svg line,
+#generated-text-svg circle,
+#generated-text-svg path {
+    stroke: #fff;
+    fill: none;
+} */
+
+/* 🔥 修改：底部空白占位区域 - 减少到 2000px */
+.bottom-spacer {
+    width: 100%;
+    height: 2000px; /* 🔥 从 2400px 减少到 2000px */
+    pointer-events: none;
+    position: relative;
+    display: block;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .bottom-image {
+        width: 30vw;
+        height: 30vw;
+        left: 50%; /* 🔥 保持居中 */
+        transform: translateX(-50%);
+    }
+    
+    .bottom-image.left {
+        top: 15vh;
+    }
+    
+    .bottom-image.right {
+        top: calc(15vh + 32vw);
+    }
+    
+    .draggable-text-frame {
+        width: 240px;
+        height: 420px;
+        padding: 65px 25px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .designer-text-path {
+        width: 340px;
+        height: 520px;
+    }
+    
+    .designer-text-path text {
+        font-size: 10px;
+    }
+    
+    .form-images-container {
+        left: 50%; /* 🔥 保持居中 */
+        transform: translateX(-50%);
+        top: calc(15vh + 32vw);
+        height: 25vw;
+        gap: 3vw;
+    }
+    
+    .form-image {
+        width: 22vw;
+        height: 22vw;
+    }
+    
+    .bottom-spacer {
+        height: 1800px; /* 🔥 从 2000px 减少到 1800px */
+    }
+}
+
+@media (max-width: 480px) {
+    .bottom-image {
+        width: 35vw;
+        height: 35vw;
+        left: 50%; /* 🔥 保持居中 */
+        transform: translateX(-50%);
+    }
+    
+    .draggable-text-frame {
+        width: 200px;
+        height: 360px;
+        padding: 55px 22px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    .designer-text-path {
+        width: 300px;
+        height: 460px;
+    }
+    
+    .designer-text-path text {
+        font-size: 9px;
+        letter-spacing: 1.5px;
+    }
+    
+    .form-images-container {
+        left: 50%; /* 🔥 保持居中 */
+        transform: translateX(-50%);
+        height: 30vw;
+        gap: 2vw;
+    }
+    
+    .form-image {
+        width: 28vw;
+        height: 28vw;
+    }
+    
+    .bottom-spacer {
+        height: 1600px; /* 🔥 从 1700px 减少到 1600px */
+    }
+}

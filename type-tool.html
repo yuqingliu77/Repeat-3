@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Type Tool - Repeat*3</title>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/controls.css">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+</head>
+<body>
+    <div id="container">
+        <!-- 左侧控制面板 -->
+        <aside id="aside">
+            <div id="controls-header">
+                <h2>TYPE TOOL</h2>
+                <button id="toggle-controls" title="Hide Controls">×</button>
+            </div>
+
+            <!-- 放大镜预览区域 -->
+            <div id="magnifier-container">
+                <svg id="svg-preview" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet">
+                    <!-- 动态内容由 JS 生成 -->
+                </svg>
+            </div>
+
+            <!-- 文字输入框 -->
+            <label for="type-input">Type</label>
+            <textarea id="type-input" rows="3" placeholder="Type here...">Type</textarea>
+
+            <!-- 参数控制 -->
+            <div id="controls">
+                <!-- 动态生成的控制器 -->
+            </div>
+
+            <!-- 底部装饰圆 -->
+            <div class="decoration-circle decoration-circle-left"></div>
+            <div class="decoration-circle decoration-circle-right"></div>
+
+            <!-- 底部十字装饰 -->
+            <div class="cross-decoration bottom left">
+                <span class="cross-tooltip">Zoom In (+)</span>
+            </div>
+            <div class="cross-decoration bottom center">
+                <span class="cross-tooltip">Reset Size</span>
+            </div>
+            <div class="cross-decoration bottom right">
+                <span class="cross-tooltip">Zoom Out (-)</span>
+            </div>
+
+            <!-- 下载按钮 -->
+            <button id="btn-download-font" title="Download Font">
+                <span>DOWNLOAD</span>
+            </button>
+        </aside>
+
+        <!-- 右侧主显示区域 -->
+        <main id="main">
+            <!-- 顶部导航 -->
+            <nav class="top-nav">
+                <div class="nav-left">
+                    <a href="index.html" class="nav-link">HOME</a>
+                </div>
+                <div class="nav-center">
+                    <a href="type-tool.html" class="nav-link active">TYPE TOOL</a>
+                </div>
+                <div class="nav-right">
+                    <a href="visuals.html" class="nav-link">VISUALS</a>
+                </div>
+            </nav>
+
+            <!-- 字体显示区域 -->
+            <div id="typing">
+                <svg id="svg-text" viewBox="0 0 2000 2000" preserveAspectRatio="xMidYMid meet">
+                    <!-- 隐藏的输入框 -->
+                    <foreignObject x="0" y="0" width="2000" height="2000">
+                        <textarea id="input-text" placeholder="Type...">Type</textarea>
+                    </foreignObject>
+                </svg>
+            </div>
+
+            <!-- 右侧颜色渐变条 -->
+            <div id="color-gradient-bar"></div>
+        </main>
+    </div>
+
+    <!-- 右下角显示控制面板按钮 -->
+    <button id="show-controls-btn" class="show-controls-button">
+        <svg viewBox="0 0 100 100" id="radial-svg">
+            <g id="radial-lines"></g>
+        </svg>
+    </button>
+
+    <!-- 引入脚本 -->
+    <script src="vendor/lodash.js"></script>
+    <script src="scripts/font.js"></script>
+    <script src="scripts/renderPixel.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/controls.js"></script>
+</body>
+</html>
